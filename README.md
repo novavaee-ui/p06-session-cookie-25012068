@@ -1,54 +1,58 @@
-# Praktikum Pemrograman Web I - Pertemuan 6
+# Praktikum Pemrograman Web I
+## Pertemuan 06 - Session, Cookie, Flash Message, dan Keranjang
 
-## Identitas
+### Identitas
 
-Nama: NUr Fadilah
+Nama : NUr Fadilah
 
-NIM: 25012068
+NIM  : 25012068
 
 Kelas: M31
-## Judul
 
-Session, Cookie, Flash Message, dan Keranjang Sederhana
 
 ## Deskripsi
 
-Aplikasi keranjang belanja sederhana menggunakan PHP tanpa database.
+Aplikasi keranjang belanja sederhana yang dibuat menggunakan PHP.
 
-Aplikasi menggunakan Session untuk menyimpan data keranjang,
-Flash Message untuk memberikan informasi setelah proses,
-dan Cookie untuk menyimpan preferensi tema.
+Aplikasi menggunakan:
 
-## Fitur
+- Session untuk menyimpan data keranjang.
+- Cookie untuk menyimpan tema tampilan.
+- Flash Message untuk memberikan informasi setelah proses.
+- Validasi input untuk menjaga data yang diterima.
 
-- Menampilkan daftar produk
-- Menambahkan produk ke keranjang
-- Menghitung jumlah produk
-- Menghitung subtotal
-- Menghitung total belanja
-- Menghapus produk
-- Mengosongkan keranjang
-- Flash message
-- Tema light dan dark
-- Validasi input
-- GitHub dengan minimal 10 commit
+
+## Fitur Aplikasi
+
+1. Menampilkan katalog produk.
+2. Menambahkan produk ke keranjang.
+3. Menampilkan jumlah item pada keranjang.
+4. Menampilkan ringkasan keranjang.
+5. Menghitung subtotal setiap produk.
+6. Menghitung total belanja.
+7. Menghapus produk dari keranjang.
+8. Mengosongkan seluruh keranjang.
+9. Menampilkan flash message.
+10. Menggunakan tema Light dan Dark.
+11. Validasi input pada proses keranjang.
+
 
 ## Struktur Folder
 
 ```text
 pertemuan-06/
 │
-├── index.php
-├── cart.php
-├── actions.php
-├── bootstrap.php
-├── functions.php
-├── README.md
-├── .gitignore
+├── components/
+│   ├── footer.php
+│   └── header.php
 │
 ├── data/
 │   └── products.php
 │
-└── components/
-    ├── header.php
-    └── footer.php
+├── .gitignore
+├── actions.php
+├── bootstrap.php
+├── cart.php
+├── functions.php
+├── index.php
+└── README.md
