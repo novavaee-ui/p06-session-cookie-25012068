@@ -14,6 +14,8 @@ $products = require __DIR__ . '/data/products.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
+    setFlash('Metode request tidak valid.');
+
     header('Location: index.php');
     exit;
 }
@@ -21,26 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 /*
 |--------------------------------------------------------------------------
-| Ambil action
+| Validasi Action
 |--------------------------------------------------------------------------
 */
+
+$allowedActions = [
+    'add',
+    'remove',
+    'clear'
+];
 
 $action = isset($_POST['action'])
     ? $_POST['action']
     : '';
 
+if (!in_array($action, $allowedActions, true)) {
 
-/*
-|--------------------------------------------------------------------------
-| Ambil ID Produk
-|--------------------------------------------------------------------------
-*/
+    setFlash('Aksi tidak valid.');
 
-$id = filter_input(
-    INPUT_POST,
-    'id',
-    FILTER_VALIDATE_INT
-);
+    header('Location: index.php');
+    exit;
+}
 
 
 /*
@@ -49,12 +52,26 @@ $id = filter_input(
 |--------------------------------------------------------------------------
 */
 
-if (
-    $action === 'add' &&
-    $id !== false &&
-    $id !== null &&
-    isset($products[$id])
-) {
+if ($action === 'add') {
+
+    $id = filter_input(
+        INPUT_POST,
+        'id',
+        FILTER_VALIDATE_INT
+    );
+
+    if (
+        $id === false ||
+        $id === null ||
+        !isset($products[$id])
+    ) {
+
+        setFlash('Produk tidak valid.');
+
+        header('Location: index.php');
+        exit;
+    }
+
 
     if (isset($_SESSION['cart'][$id])) {
 
@@ -83,11 +100,25 @@ if (
 
 if ($action === 'remove') {
 
+    $id = filter_input(
+        INPUT_POST,
+        'id',
+        FILTER_VALIDATE_INT
+    );
+
     if (
-        $id !== false &&
-        $id !== null &&
-        isset($_SESSION['cart'][$id])
+        $id === false ||
+        $id === null
     ) {
+
+        setFlash('ID produk tidak valid.');
+
+        header('Location: cart.php');
+        exit;
+    }
+
+
+    if (isset($_SESSION['cart'][$id])) {
 
         unset($_SESSION['cart'][$id]);
 
@@ -100,7 +131,6 @@ if ($action === 'remove') {
         setFlash(
             'Produk tidak ditemukan di keranjang.'
         );
-
     }
 
     header('Location: cart.php');
@@ -129,23 +159,8 @@ if ($action === 'clear') {
         setFlash(
             'Keranjang sudah kosong.'
         );
-
     }
 
     header('Location: cart.php');
     exit;
 }
-
-
-/*
-|--------------------------------------------------------------------------
-| Action Tidak Valid
-|--------------------------------------------------------------------------
-*/
-
-setFlash(
-    'Permintaan tidak valid.'
-);
-
-header('Location: index.php');
-exit;
