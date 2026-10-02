@@ -5,7 +5,7 @@ require_once __DIR__ . '/functions.php';
 
 /*
 |--------------------------------------------------------------------------
-| Cookie Tema
+| Validasi Tema
 |--------------------------------------------------------------------------
 */
 
@@ -19,21 +19,25 @@ if (!in_array($theme, $allowedThemes, true)) {
     $theme = 'light';
 }
 
+
 /*
 |--------------------------------------------------------------------------
-| Mengubah Tema
+| Ubah Tema
 |--------------------------------------------------------------------------
 */
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['theme'])) {
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_POST['theme'])
+) {
 
-    $candidate = $_POST['theme'];
+    $newTheme = $_POST['theme'];
 
-    if (in_array($candidate, $allowedThemes, true)) {
+    if (in_array($newTheme, $allowedThemes, true)) {
 
         setcookie(
             'theme',
-            $candidate,
+            $newTheme,
             [
                 'expires' => time() + (60 * 60 * 24 * 30),
                 'path' => '/',
@@ -45,7 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['theme'])) {
         header('Location: index.php');
         exit;
     }
+
+    setFlash('Tema tidak valid.');
+
+    header('Location: index.php');
+    exit;
 }
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,13 +148,11 @@ require_once __DIR__ . '/components/header.php';
 </div>
 
 
-<!-- Pilihan Tema -->
+<!-- Tema -->
 
 <div style="margin-top: 30px;">
 
-    <h3>
-        Tema Tampilan
-    </h3>
+    <h3>Tema Tampilan</h3>
 
     <form method="POST">
 
