@@ -5,22 +5,43 @@ require_once __DIR__ . '/functions.php';
 
 $products = require __DIR__ . '/data/products.php';
 
+
+/*
+|--------------------------------------------------------------------------
+| Hanya menerima POST
+|--------------------------------------------------------------------------
+*/
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
     header('Location: index.php');
     exit;
-
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| Ambil action
+|--------------------------------------------------------------------------
+*/
 
 $action = isset($_POST['action'])
     ? $_POST['action']
     : '';
+
+
+/*
+|--------------------------------------------------------------------------
+| Ambil ID Produk
+|--------------------------------------------------------------------------
+*/
 
 $id = filter_input(
     INPUT_POST,
     'id',
     FILTER_VALIDATE_INT
 );
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,11 +66,14 @@ if (
 
     }
 
-    setFlash('Produk berhasil ditambahkan ke keranjang.');
+    setFlash(
+        'Produk berhasil ditambahkan ke keranjang.'
+    );
 
     header('Location: index.php');
     exit;
 }
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,20 +81,32 @@ if (
 |--------------------------------------------------------------------------
 */
 
-if (
-    $action === 'remove' &&
-    $id !== false &&
-    $id !== null &&
-    isset($_SESSION['cart'][$id])
-) {
+if ($action === 'remove') {
 
-    unset($_SESSION['cart'][$id]);
+    if (
+        $id !== false &&
+        $id !== null &&
+        isset($_SESSION['cart'][$id])
+    ) {
 
-    setFlash('Produk berhasil dihapus dari keranjang.');
+        unset($_SESSION['cart'][$id]);
+
+        setFlash(
+            'Produk berhasil dihapus dari keranjang.'
+        );
+
+    } else {
+
+        setFlash(
+            'Produk tidak ditemukan di keranjang.'
+        );
+
+    }
 
     header('Location: cart.php');
     exit;
 }
+
 
 /*
 |--------------------------------------------------------------------------
@@ -80,21 +116,36 @@ if (
 
 if ($action === 'clear') {
 
-    $_SESSION['cart'] = [];
+    if (!empty($_SESSION['cart'])) {
 
-    setFlash('Keranjang berhasil dikosongkan.');
+        $_SESSION['cart'] = [];
+
+        setFlash(
+            'Keranjang berhasil dikosongkan.'
+        );
+
+    } else {
+
+        setFlash(
+            'Keranjang sudah kosong.'
+        );
+
+    }
 
     header('Location: cart.php');
     exit;
 }
 
+
 /*
 |--------------------------------------------------------------------------
-| Request Tidak Valid
+| Action Tidak Valid
 |--------------------------------------------------------------------------
 */
 
-setFlash('Permintaan tidak valid.');
+setFlash(
+    'Permintaan tidak valid.'
+);
 
 header('Location: index.php');
 exit;
